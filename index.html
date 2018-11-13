@@ -9,6 +9,7 @@
             <h1>Web Dictionary</h1>
         </div>
         <div>
+             <input id="searchvalue" type="text" name="term">
             <button id="search" type="button">Search</button>
         </div>
         <div id="result">
@@ -18,15 +19,17 @@
       document.getElementById("search").addEventListener("click", exerise);  
       
       function exerise(){
+         let text= document.getElementById("searchvalue").value.toString();
           
           var xhttp = new XMLHttpRequest();
           xhttp.onreadystatechange = function() {
           if (this.readyState == 4 && this.status == 200) {
-              alert(this.response);
+              //alert(this.response);
+              document.getElementById("result").innerHTML=this.responseText;
     }
   };
  
-   xhttp.open("GET", "request.php?q=definition", true);
+   xhttp.open("GET", "request.php?q="+text, true);
    xhttp.send();
 }
       
