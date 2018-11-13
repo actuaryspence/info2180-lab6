@@ -11,12 +11,14 @@
         <div>
              <input id="searchvalue" type="text" name="term">
             <button id="search" type="button">Search</button>
+            <button id= "getAll" > Get All Definitions </button>
         </div>
         <div id="result">
         </div>
     </body>
     <script>
       document.getElementById("search").addEventListener("click", exerise);  
+      document.getElementById("getAll").addEventListener("click",exerise1);
       
       function exerise(){
          let text= document.getElementById("searchvalue").value.toString();
@@ -32,7 +34,25 @@
    xhttp.open("GET", "request.php?q="+text, true);
    xhttp.send();
 }
-      
+   function exerise1(){
+       alert("hi");
+        let request_all = new XMLHttpRequest();
+        let result =document.getElementById("result");
+        request_all.onreadystatechange = function(){
+            if(request_all.readyState === 4 && request_all.status === 200){
+                let list="<ol>";
+                let xml_document = request_all.responseXML;
+                let words = xml_document.getElementsByTagName("definition");
+                for(let index = 0; index<words.length; index++){
+                    list+="<li><h3>"+words[index].getAttribute("name")+"</h3><p>"+words[index].childNodes[0].nodeValue+"</p><p> - "+words[index].getAttributeNode("author").value+"</p></li>";
+                }
+                list+="</ol>";
+                result.innerHTML = "<h2>Result</h2>"+list;
+            }
+        };
+        request_all.open("GET","request.php?q=&all=true",true);
+        request_all.send();
+   }   
         
     </script>
 </html>
